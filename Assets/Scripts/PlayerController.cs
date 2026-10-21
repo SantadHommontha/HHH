@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour
         if(direction.x < 0 && turnRight)
         {
           Flip();
-           ChangeOrderLayer();
+          ChangeOrderLayer();
         }
          
 
