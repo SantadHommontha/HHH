@@ -9,7 +9,15 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D rb;
     private Vector2 movement;
-   public  float angle;
+
+    public Transform item;
+    public SpriteRenderer flashlight;
+
+    public GameObject playerBody;
+    
+    public bool turnRight = true;
+
+   //public  Vector2 direction;
 
     void Start()
     {
@@ -35,16 +43,61 @@ public class PlayerController : MonoBehaviour
  
        
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 direction = (mousePos - transform.position);
-         angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        Vector2 direction = (mousePos - item.position);
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         
-      //  transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+        item.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+
+        //ถ้าเม้าส์อยู่ทางขวา
+        if(direction.x > 0 && !turnRight)
+        {
+          Flip();
+          ChangeOrderLayer();
+        }
+        //ถ้าเม้าส์อยู่ทางซ้าย     
+        if(direction.x < 0 && turnRight)
+        {
+          Flip();
+           ChangeOrderLayer();
+        }
+         
+
     }
 
     void FixedUpdate()
     {
       //  rb.velocity = movement * moveSpeed * Time.fixedDeltaTime;
       rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
-        rb.MoveRotation(angle);
+       // rb.MoveRotation(angle);
     }
+
+
+  void Flip()
+  {
+    //เอาค่า scale มาเก็บไว่้ก่อรน
+    Vector3 currnetScale = playerBody.transform.localScale;
+    //เปลี่ยนค่า scale x เป็นค่าตรงข้ามด้วยการคูณด้วย -1
+    currnetScale.x *=-1;
+    //เอาค่าที่เปลี่ยนไปใช่
+    playerBody.transform.localScale = currnetScale;
+    //เปลี่ยนค่า turnRight เป็นค่าตรงข้าม
+    turnRight = !turnRight;
+  }
+
+  void ChangeOrderLayer()
+  {
+  
+    if(flashlight != null)
+    {
+      if(turnRight)
+      {
+        flashlight.sortingOrder = 1;
+      }
+      else
+      {
+        flashlight.sortingOrder = -1;
+      }
+    }
+  }
+
 }
