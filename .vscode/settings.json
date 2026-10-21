@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "HORROR.sln"
+    "dotnet.defaultSolution": "HHH.sln"
 }
